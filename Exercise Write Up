@@ -1,0 +1,14 @@
+1. data exploration
+
+    - are there any data quality issues present?
+
+        ** transactions table **
+            - there appeared to be many duplicate records with the use of a composite key comprised of receipt_id, user_id, and barcode. I opted to remove these duplicate records in the source csv prior to loading the data to my datawarehouse.
+              the code i used to identify this was:
+                  
+                  
+        ** users table **
+
+        ** products table **
+
+    - 
