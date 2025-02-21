@@ -4,7 +4,7 @@
     - Are there any fields that are challenging to understand?
 
         ** Users **
-            - There are no duplicate or null ids which fares well for using this as the primary key to join to the transactions table. To test not null and unique I ran these queries
+            - There are no duplicate or null records in the id column which fares well for using this as the primary key to join to the transactions table. To test not null and unique I ran these queries
                 - Unique:
                     select
                           id,
