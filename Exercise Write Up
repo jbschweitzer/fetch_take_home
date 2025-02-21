@@ -8,7 +8,7 @@
                 - Unique:
                     select
                           id,
-                          count(*) record_count
+                          count(*) as record_count
                     from `fetch.users`
                     group by
                           id 
