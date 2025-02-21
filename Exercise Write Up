@@ -50,5 +50,41 @@
 
         ** Products **
 
-    - Are there any fields that are challenging to understand?
-        - I was initially caught off guard by the final_quantity field having values with decimals 
+
+2. Provide SQL Queries
+
+    - What are the top 5 brands by receipts scanned among users 21 and over?
+
+        The top 5 Brands by receipt count among users 21 and over are Nerds Candy, Dove, Sour Patch Kids, Trident, and Meijer. The code used to draw this conclusion is as follows
+            
+            with users_over_21 as (
+            
+            select
+              users.id,
+              birth_date,
+              date_diff(current_date(), date(users.birth_date), year) as user_age_years
+            from `fetch.users` users 
+            where 
+              date_diff(current_date(), date(users.birth_date), year) >= 21 --users 21 years old or older
+            
+            )
+            
+            select
+              product.brand,
+              count(distinct receipt_id) as receipt_count
+            from
+              users_over_21 users21
+              left join `fetch.transactions` transaction 
+                on transaction.user_id = users21.id
+              left join `fetch.products` product 
+                on product.barcode = transaction.barcode
+            where
+              transaction.barcode is not null --omits lines where barcode is null as to not create errant joins to products table
+              and product.brand is not null --omits products that do not have a brand listed
+            group by
+              product.brand
+            order by
+              receipt_count desc
+            limit 5
+
+    - 
