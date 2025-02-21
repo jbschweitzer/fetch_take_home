@@ -1,13 +1,52 @@
 1. Data Exploration
 
     - Are there any data quality issues present?
+    - Are there any fields that are challenging to understand?
+
+        ** Users **
+            - There are no duplicate or null ids which fares well for using this as the primary key to join to the transactions table. To test not null and unique I ran these queries
+                - Unique:
+                    select
+                          id,
+                          count(*) record_count
+                    from `fetch.users`
+                    group by
+                          id 
+                    having 
+                          record_count > 1
+                - Not Null
+                    select
+                          *
+                    from `fetch.users`
+                    where
+                          id is null
+            - 3.7% (3,675 of 100,000 records) of the birth_date fields are null. A measureable percentage but my assumption is that is is not so many that we are unable to draw directionally correct business insights regarding user ages. 
+                I would caveat any age based analysis with this information alongside my working assumption that null birth dates are proportionately empty. The code used to idenitfy this was:
+                    select
+                          *
+                    from `fetch.users`
+                    where
+                          birth_date is null
+            - Similar to birth_date, the state field is null 4.8% (4,812 records) of the time in the users table. Similar assumptions and code used as above
+            - A more significant percentage (30.5%) of the language field are null in this table to where I would not make aggregate reporting or decisions without further investigation on how this information is captured.
+                On this same note, the two values that are present, are 'en' and 'es-419' which require assumptions about their significance that would be worth exploring with stakeholders and documenting
+            - 5.9% (5,892) of the gender column fields are null. This field is also populated with some values that appear to represent the same information (ie 'prefer_not_to_say' and 'Prefere not to say') which I believe is worth exploring within whomever
+                captures this information to see if data validation and normalization could be introduced upstream of the data coming into the data warehouse. To identify this, I used this code:
+                    select distinct
+                          gender,
+                          count(*) as record_count
+                    from `fetch.users`
+                    group by
+                          gender 
+                    order by
+                          record_count desc
 
         ** Transactions **
             - there appeared to be many duplicate records with the use of a composite key comprised of receipt_id, user_id, and barcode. I opted to remove the duplicate records, that had either no units or no sales associated, in the source csv prior to loading the data to my datawarehouse.
               the code i used to identify these duplicates was:
 
                   
-        ** Users **
+       
 
         ** Products **
 
